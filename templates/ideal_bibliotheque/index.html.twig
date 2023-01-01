@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}IdealBibliotheque index{% endblock %}
+
+{% block body %}
+    <h1>IdealBibliotheque index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Book1</th>
+                <th>Book2</th>
+                <th>Book3</th>
+                <th>Book4</th>
+                <th>Book5</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ideal_bibliotheque in ideal_bibliotheques %}
+            <tr>
+                <td>{{ ideal_bibliotheque.id }}</td>
+                <td>{{ ideal_bibliotheque.book1 }}</td>
+                <td>{{ ideal_bibliotheque.book2 }}</td>
+                <td>{{ ideal_bibliotheque.book3 }}</td>
+                <td>{{ ideal_bibliotheque.book4 }}</td>
+                <td>{{ ideal_bibliotheque.book5 }}</td>
+                <td>
+                    <a href="{{ path('app_ideal_bibliotheque_show', {'id': ideal_bibliotheque.id}) }}">show</a>
+                    <a href="{{ path('app_ideal_bibliotheque_edit', {'id': ideal_bibliotheque.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ideal_bibliotheque_new') }}">Create new</a>
+{% endblock %}

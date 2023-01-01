@@ -69,10 +69,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: IdealBibliotheque::class)]
+    private Collection $idealBibliotheques;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: PostLike3::class)]
+    private Collection $postLike3s;
+
     public function __construct()
     {
         $this->postShares = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->idealBibliotheques = new ArrayCollection();
+        $this->postLike3s = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -225,6 +233,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, IdealBibliotheque>
+     */
+    public function getIdealBibliotheques(): Collection
+    {
+        return $this->idealBibliotheques;
+    }
+
+    public function addIdealBibliotheque(IdealBibliotheque $idealBibliotheque): self
+    {
+        if (!$this->idealBibliotheques->contains($idealBibliotheque)) {
+            $this->idealBibliotheques->add($idealBibliotheque);
+            $idealBibliotheque->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdealBibliotheque(IdealBibliotheque $idealBibliotheque): self
+    {
+        if ($this->idealBibliotheques->removeElement($idealBibliotheque)) {
+            // set the owning side to null (unless already changed)
+            if ($idealBibliotheque->getUser() === $this) {
+                $idealBibliotheque->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PostLike3>
+     */
+    public function getPostLike3s(): Collection
+    {
+        return $this->postLike3s;
+    }
+
+    public function addPostLike3(PostLike3 $postLike3): self
+    {
+        if (!$this->postLike3s->contains($postLike3)) {
+            $this->postLike3s->add($postLike3);
+            $postLike3->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostLike3(PostLike3 $postLike3): self
+    {
+        if ($this->postLike3s->removeElement($postLike3)) {
+            // set the owning side to null (unless already changed)
+            if ($postLike3->getUser() === $this) {
+                $postLike3->setUser(null);
+            }
+        }
 
         return $this;
     }

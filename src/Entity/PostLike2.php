@@ -5,14 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\LikePostRepository;
-use Doctrine\DBAL\Types\Types;
+use App\Repository\PostLike2Repository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LikePostRepository::class)]
-#[ApiResource]
-#[ApiFilter(SearchFilter::class, properties: [ 'postShare' => 'exact' ])]
-class LikePost
+#[ORM\Entity(repositoryClass: PostLike2Repository::class)]
+#[ApiFilter(SearchFilter::class, properties: [ 'post_share' => 'exact' ])]
+class PostLike2
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,10 +20,7 @@ class LikePost
     #[ORM\Column(nullable: true)]
     private ?int $total = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date = null;
-
-    #[ORM\ManyToOne(inversedBy: 'likePosts')]
+    #[ORM\ManyToOne(inversedBy: 'postLike2s')]
     private ?PostShare $postShare = null;
 
     public function getId(): ?int
@@ -41,18 +36,6 @@ class LikePost
     public function setTotal(?int $total): self
     {
         $this->total = $total;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
 
         return $this;
     }

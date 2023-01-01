@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PostLike2 index{% endblock %}
+
+{% block body %}
+    <h1>PostLike2 index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Total</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for post_like2 in post_like2s %}
+            <tr>
+                <td>{{ post_like2.id }}</td>
+                <td>{{ post_like2.total }}</td>
+                <td>
+                    <a href="{{ path('app_post_like2_show', {'id': post_like2.id}) }}">show</a>
+                    <a href="{{ path('app_post_like2_edit', {'id': post_like2.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_post_like2_new') }}">Create new</a>
+{% endblock %}

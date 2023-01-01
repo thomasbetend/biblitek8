@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}IdealBibliotheque{% endblock %}
+
+{% block body %}
+    <h1>IdealBibliotheque</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ideal_bibliotheque.id }}</td>
+            </tr>
+            <tr>
+                <th>Book1</th>
+                <td>{{ ideal_bibliotheque.book1 }}</td>
+            </tr>
+            <tr>
+                <th>Book2</th>
+                <td>{{ ideal_bibliotheque.book2 }}</td>
+            </tr>
+            <tr>
+                <th>Book3</th>
+                <td>{{ ideal_bibliotheque.book3 }}</td>
+            </tr>
+            <tr>
+                <th>Book4</th>
+                <td>{{ ideal_bibliotheque.book4 }}</td>
+            </tr>
+            <tr>
+                <th>Book5</th>
+                <td>{{ ideal_bibliotheque.book5 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_ideal_bibliotheque_index') }}">back to list</a>
+
+    <a href="{{ path('app_ideal_bibliotheque_edit', {'id': ideal_bibliotheque.id}) }}">edit</a>
+
+    {{ include('ideal_bibliotheque/_delete_form.html.twig') }}
+{% endblock %}

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource]
-#[ApiFilter(SearchFilter::class, properties: [ 'user' => 'exact' ])]
+#[ApiFilter(SearchFilter::class, properties: [ 'post_share' => 'exact' ])]
 class Comment
 {
     #[ORM\Id]
