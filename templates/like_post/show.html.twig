@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LikePost{% endblock %}
+
+{% block body %}
+    <h1>LikePost</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ like_post.id }}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>{{ like_post.total }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ like_post.date ? like_post.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_like_post_index') }}">back to list</a>
+
+    <a href="{{ path('app_like_post_edit', {'id': like_post.id}) }}">edit</a>
+
+    {{ include('like_post/_delete_form.html.twig') }}
+{% endblock %}

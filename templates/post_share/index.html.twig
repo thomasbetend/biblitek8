@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PostShare index{% endblock %}
+
+{% block body %}
+    <h1>PostShare index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for post_share in post_shares %}
+            <tr>
+                <td>{{ post_share.id }}</td>
+                <td>{{ post_share.description }}</td>
+                <td>{{ post_share.date ? post_share.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ post_share.image }}</td>
+                <td>
+                    <a href="{{ path('app_post_share_show', {'id': post_share.id}) }}">show</a>
+                    <a href="{{ path('app_post_share_edit', {'id': post_share.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_post_share_new') }}">Create new</a>
+{% endblock %}

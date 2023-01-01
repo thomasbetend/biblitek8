@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PostShare{% endblock %}
+
+{% block body %}
+    <h1>PostShare</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ post_share.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ post_share.description }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ post_share.date ? post_share.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ post_share.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_post_share_index') }}">back to list</a>
+
+    <a href="{{ path('app_post_share_edit', {'id': post_share.id}) }}">edit</a>
+
+    {{ include('post_share/_delete_form.html.twig') }}
+{% endblock %}
