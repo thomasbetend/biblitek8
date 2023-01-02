@@ -8,26 +8,34 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [ 'groups' => 'read_comment']
+)]
 #[ApiFilter(SearchFilter::class, properties: [ 'post_share' => 'exact' ])]
 class Comment
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read_comment'])]
     private ?int $id = null;
 
+    #[Groups(['read_comment'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
+    #[Groups(['read_comment'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date = null;
 
+    #[Groups(['read_comment'])]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?User $user = null;
 
+    #[Groups(['read_comment'])]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?PostShare $post_share = null;
 

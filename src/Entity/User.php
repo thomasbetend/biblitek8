@@ -43,6 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read_postshare', 'read_comment', 'write_postshare'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -64,9 +65,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comments;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read_postshare'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read_postshare'])]
     private ?string $avatar = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: IdealBibliotheque::class)]

@@ -11,9 +11,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostShareRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [ 'groups' => 'read_postshare' ],
+    denormalizationContext: [ 'groups' => 'write_postshare' ]
+)]
 #[ApiFilter(SearchFilter::class, properties: [ 'user' => 'exact' ])]
 #[ApiFilter(OrderFilter::class, properties: [ 'date' => 'DESC'])]
 class PostShare
@@ -21,18 +25,23 @@ class PostShare
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read_postshare', 'read_comment', 'write_postshare'])]
     private ?int $id = null;
 
+    #[Groups(['read_postshare', 'write_postshare'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[Groups(['write_postshare'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date = null;
 
+    #[Groups(['read_postshare', 'write_postshare'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'postShares')]
+    #[Groups(['read_postshare', 'write_postshare'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'post_share', targetEntity: Comment::class)]
