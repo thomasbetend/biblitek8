@@ -23,8 +23,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations:[
         new Get(),
         new GetCollection(),
-        new Post(),
-        new Put(),
+        new Post(
+            security: "is_granted('IS_AUTHENTICATED_ANONYMOUSLY') or is_granted('ROLE_ADMIN')"
+        ),
+        new Put(
+            security: "is_granted('ROLE_USER')",
+        ),
         new Delete(),
         new Get(
             uriTemplate: "/me",
@@ -35,7 +39,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ],
     )
 ]
-#[ApiResource()]
+#[ApiResource(
+    denormalizationContext: [ 'groups' => 'write_user' ]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -43,9 +49,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read_postshare', 'read_comment', 'write_postshare'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_ideal_bibliotek'])]
     private ?int $id = null;
 
+    #[Groups(['write_user'])]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -56,6 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['write_user'])]
     private ?string $password = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: PostShare::class)]
@@ -65,11 +73,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comments;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read_postshare'])]
+    #[Groups(['read_postshare', 'read_comment', 'write_user'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read_postshare'])]
+    #[Groups(['read_postshare', 'read_comment'])]
     private ?string $avatar = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: IdealBibliotheque::class)]
@@ -78,12 +86,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: PostLike3::class)]
     private Collection $postLike3s;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: LikePost::class)]
+    private Collection $likePosts;
+
     public function __construct()
     {
         $this->postShares = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->idealBibliotheques = new ArrayCollection();
         $this->postLike3s = new ArrayCollection();
+        $this->likePosts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -294,6 +306,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($postLike3->getUser() === $this) {
                 $postLike3->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LikePost>
+     */
+    public function getLikePosts(): Collection
+    {
+        return $this->likePosts;
+    }
+
+    public function addLikePost(LikePost $likePost): self
+    {
+        if (!$this->likePosts->contains($likePost)) {
+            $this->likePosts->add($likePost);
+            $likePost->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikePost(LikePost $likePost): self
+    {
+        if ($this->likePosts->removeElement($likePost)) {
+            // set the owning side to null (unless already changed)
+            if ($likePost->getUser() === $this) {
+                $likePost->setUser(null);
             }
         }
 

@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostShareRepository::class)]
 #[ApiResource(
+    //security: "is_granted('ROLE_USER')",
     normalizationContext: [ 'groups' => 'read_postshare' ],
     denormalizationContext: [ 'groups' => 'write_postshare' ]
 )]

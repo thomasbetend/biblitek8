@@ -7,32 +7,43 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\IdealBibliothequeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: IdealBibliothequeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    //security: "is_granted('ROLE_USER')",
+    normalizationContext: [ 'groups' => 'read_ideal_biblioteque' ]
+)]
 #[ApiFilter(SearchFilter::class, properties: [ 'user' => 'exact' ])]
 class IdealBibliotheque
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read_ideal_biblioteque'])]
     private ?int $id = null;
 
+    #[Groups(['read_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book1 = null;
 
+    #[Groups(['read_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book2 = null;
 
+    #[Groups(['read_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book3 = null;
 
+    #[Groups(['read_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book4 = null;
 
+    #[Groups(['read_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book5 = null;
 
+    #[Groups(['read_ideal_biblioteque'])]
     #[ORM\ManyToOne(inversedBy: 'idealBibliotheques')]
     private ?User $user = null;
 

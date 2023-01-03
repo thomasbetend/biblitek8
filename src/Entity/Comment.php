@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource(
+    //security: "is_granted('ROLE_USER')",
     normalizationContext: [ 'groups' => 'read_comment']
 )]
 #[ApiFilter(SearchFilter::class, properties: [ 'post_share' => 'exact' ])]

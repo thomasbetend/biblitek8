@@ -8,10 +8,14 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\LikePostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: LikePostRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    //security: "is_granted('ROLE_USER')",
+)]
 #[ApiFilter(SearchFilter::class, properties: [ 'postShare' => 'exact' ])]
+//#[UniqueConstraint(['postShare', 'user'])]
 class LikePost
 {
     #[ORM\Id]
@@ -27,6 +31,9 @@ class LikePost
 
     #[ORM\ManyToOne(inversedBy: 'likePosts')]
     private ?PostShare $postShare = null;
+
+    #[ORM\ManyToOne(inversedBy: 'likePosts')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -65,6 +72,18 @@ class LikePost
     public function setPostShare(?PostShare $postShare): self
     {
         $this->postShare = $postShare;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
