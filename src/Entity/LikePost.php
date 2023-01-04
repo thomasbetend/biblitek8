@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 #[ApiResource(
     //security: "is_granted('ROLE_USER')",
 )]
-#[ApiFilter(SearchFilter::class, properties: [ 'postShare' => 'exact' ])]
+#[ApiFilter(SearchFilter::class, properties: [ 'postShare' => 'exact', 'user' => 'exact' ])]
 //#[UniqueConstraint(['postShare', 'user'])]
 class LikePost
 {
@@ -86,5 +86,9 @@ class LikePost
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getLikesPerPostShare(): void
+    {
     }
 }
