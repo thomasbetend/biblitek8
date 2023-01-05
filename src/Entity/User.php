@@ -86,12 +86,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: LikePost::class)]
     private Collection $likePosts;
 
+    private ?string $plainPassword = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class)]
+    private Collection $messages;
+
     public function __construct()
     {
         $this->postShares = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->idealBibliotheques = new ArrayCollection();
         $this->likePosts = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -302,6 +308,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($likePost->getUser() === $this) {
                 $likePost->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function setPlainPassword ($password) {
+        $this-> plainPassword = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword() {
+
+        return $this->plainPassword;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
             }
         }
 

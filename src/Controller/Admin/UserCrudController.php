@@ -18,9 +18,12 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield Field::new('email');
-        // yield Field::new('password');
+        yield Field::new('plainPassword');
         yield Field::new('pseudo');
         yield Field::new('avatar');
         yield CollectionField::new('postShares');
+        yield Field::new('plainPassword')
+            ->setHelp('let it empty not to change')
+            ->onlyOnForms();
     }
 }
