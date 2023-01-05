@@ -83,9 +83,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: IdealBibliotheque::class)]
     private Collection $idealBibliotheques;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: PostLike3::class)]
-    private Collection $postLike3s;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: LikePost::class)]
     private Collection $likePosts;
 
@@ -94,7 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->postShares = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->idealBibliotheques = new ArrayCollection();
-        $this->postLike3s = new ArrayCollection();
         $this->likePosts = new ArrayCollection();
     }
 
@@ -281,37 +277,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, PostLike3>
-     */
-    public function getPostLike3s(): Collection
-    {
-        return $this->postLike3s;
-    }
-
-    public function addPostLike3(PostLike3 $postLike3): self
-    {
-        if (!$this->postLike3s->contains($postLike3)) {
-            $this->postLike3s->add($postLike3);
-            $postLike3->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removePostLike3(PostLike3 $postLike3): self
-    {
-        if ($this->postLike3s->removeElement($postLike3)) {
-            // set the owning side to null (unless already changed)
-            if ($postLike3->getUser() === $this) {
-                $postLike3->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, LikePost>
      */

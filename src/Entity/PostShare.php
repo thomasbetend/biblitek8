@@ -51,18 +51,15 @@ class PostShare
     #[ORM\OneToMany(mappedBy: 'postShare', targetEntity: LikePost::class)]
     private Collection $likePosts;
 
-    #[ORM\OneToMany(mappedBy: 'postShare', targetEntity: PostLike2::class)]
-    private Collection $postLike2s;
+    #[ORM\OneToMany(mappedBy: 'postShare', targetEntity: PostImage::class)]
+    private Collection $postImages;
 
-    #[ORM\OneToMany(mappedBy: 'postShare', targetEntity: PostLike3::class)]
-    private Collection $postLike3s;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->likePosts = new ArrayCollection();
-        $this->postLike2s = new ArrayCollection();
-        $this->postLike3s = new ArrayCollection();
+        $this->postImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -179,59 +176,29 @@ class PostShare
     }
 
     /**
-     * @return Collection<int, PostLike2>
+     * @return Collection<int, PostImage>
      */
-    public function getPostLike2s(): Collection
+    public function getPostImages(): Collection
     {
-        return $this->postLike2s;
+        return $this->postImages;
     }
 
-    public function addPostLike2(PostLike2 $postLike2): self
+    public function addPostImage(PostImage $postImage): self
     {
-        if (!$this->postLike2s->contains($postLike2)) {
-            $this->postLike2s->add($postLike2);
-            $postLike2->setPostShare($this);
+        if (!$this->postImages->contains($postImage)) {
+            $this->postImages->add($postImage);
+            $postImage->setPostShare($this);
         }
 
         return $this;
     }
 
-    public function removePostLike2(PostLike2 $postLike2): self
+    public function removePostImage(PostImage $postImage): self
     {
-        if ($this->postLike2s->removeElement($postLike2)) {
+        if ($this->postImages->removeElement($postImage)) {
             // set the owning side to null (unless already changed)
-            if ($postLike2->getPostShare() === $this) {
-                $postLike2->setPostShare(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, PostLike3>
-     */
-    public function getPostLike3s(): Collection
-    {
-        return $this->postLike3s;
-    }
-
-    public function addPostLike3(PostLike3 $postLike3): self
-    {
-        if (!$this->postLike3s->contains($postLike3)) {
-            $this->postLike3s->add($postLike3);
-            $postLike3->setPostShare($this);
-        }
-
-        return $this;
-    }
-
-    public function removePostLike3(PostLike3 $postLike3): self
-    {
-        if ($this->postLike3s->removeElement($postLike3)) {
-            // set the owning side to null (unless already changed)
-            if ($postLike3->getPostShare() === $this) {
-                $postLike3->setPostShare(null);
+            if ($postImage->getPostShare() === $this) {
+                $postImage->setPostShare(null);
             }
         }
 
