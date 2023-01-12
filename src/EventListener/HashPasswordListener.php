@@ -26,6 +26,7 @@ class HashPasswordListener
             $user->getPlainPassword(),
         );
 
+        $user->setUpdatedAt(new \DateTime());
         // $this->setUpdatedAt(); stof
         $user->setPassword($hashedPassword);
 

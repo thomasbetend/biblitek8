@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\IdealBibliothequeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Unique;
@@ -19,6 +20,8 @@ use Symfony\Component\Validator\Constraints\Unique;
 #[ApiFilter(SearchFilter::class, properties: [ 'user' => 'exact' ])]
 class IdealBibliotheque
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -45,9 +48,12 @@ class IdealBibliotheque
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book5 = null;
 
-    #[Groups(['read_ideal_biblioteque'])]
-    #[ORM\ManyToOne(inversedBy: 'idealBibliotheques')]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
+
+/*     #[Groups(['read_ideal_biblioteque'])]
+    #[ORM\ManyToOne(inversedBy: 'idealBibliotheques')]
+    private ?User $user = null; */
 
     public function getId(): ?int
     {

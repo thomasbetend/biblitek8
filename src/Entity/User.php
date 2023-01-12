@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use App\Controller\GetUserController;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,6 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ApiResource(
     security: "is_granted('ROLE_ADMIN')", 
@@ -35,6 +37,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
             controller: MeAction::class,
             read: false,
             security: "is_granted('ROLE_USER')",
+        ),
+        new Get(
+            uriTemplate: "/getuser",
+            controller: GetUserController::class,
+            read: false,
+            security: "is_granted('ROLE_USER')",
         )
         ],
     )
@@ -46,10 +54,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read_postshare', 'read_comment', 'read_ideal_bibliotek'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_ideal_bibliotek', 'read-conversation'])]
     private ?int $id = null;
 
     #[Groups(['write_user'])]
@@ -80,9 +90,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read_postshare', 'read_comment'])]
     private ?string $avatar = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: IdealBibliotheque::class)]
-    private Collection $idealBibliotheques;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: LikePost::class)]
     private Collection $likePosts;
 
@@ -91,13 +98,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class)]
     private Collection $messages;
 
+    #[ORM\ManyToMany(targetEntity: Conversation::class, mappedBy: 'user')]
+    private Collection $conversations;
+
     public function __construct()
     {
         $this->postShares = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->idealBibliotheques = new ArrayCollection();
         $this->likePosts = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->conversations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -253,36 +263,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, IdealBibliotheque>
-     */
-    public function getIdealBibliotheques(): Collection
-    {
-        return $this->idealBibliotheques;
-    }
-
-    public function addIdealBibliotheque(IdealBibliotheque $idealBibliotheque): self
-    {
-        if (!$this->idealBibliotheques->contains($idealBibliotheque)) {
-            $this->idealBibliotheques->add($idealBibliotheque);
-            $idealBibliotheque->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdealBibliotheque(IdealBibliotheque $idealBibliotheque): self
-    {
-        if ($this->idealBibliotheques->removeElement($idealBibliotheque)) {
-            // set the owning side to null (unless already changed)
-            if ($idealBibliotheque->getUser() === $this) {
-                $idealBibliotheque->setUser(null);
-            }
-        }
-
-        return $this;
-    }
     
     /**
      * @return Collection<int, LikePost>
@@ -350,6 +330,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($message->getUser() === $this) {
                 $message->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): self
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations->add($conversation);
+            $conversation->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): self
+    {
+        if ($this->conversations->removeElement($conversation)) {
+            $conversation->removeUser($this);
         }
 
         return $this;

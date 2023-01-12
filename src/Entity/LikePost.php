@@ -9,6 +9,7 @@ use App\Repository\LikePostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: LikePostRepository::class)]
 #[ApiResource(
@@ -18,6 +19,8 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 //#[UniqueConstraint(['postShare', 'user'])]
 class LikePost
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -25,9 +28,6 @@ class LikePost
 
     #[ORM\Column(nullable: true)]
     private ?int $total = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'likePosts')]
     private ?PostShare $postShare = null;
@@ -48,18 +48,6 @@ class LikePost
     public function setTotal(?int $total): self
     {
         $this->total = $total;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
 
         return $this;
     }

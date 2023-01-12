@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Book;
+use App\Entity\IdealBibliotheque;
 use App\Entity\PostShare;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -43,7 +45,10 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Posts', 'fas fa-list', PostShare::class);
+        yield MenuItem::linkToCrud('Posts', 'fas fa-pen', PostShare::class);
         yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
+        yield MenuItem::linkToCrud('IdealBibliotheque', 'fas fa-book', IdealBibliotheque::class);
+        yield MenuItem::linkToCrud('Book', 'fas fa-book', Book::class);
+
     }
 }
