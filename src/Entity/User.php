@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
@@ -21,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ApiResource(
+    // mercure: true,
     security: "is_granted('ROLE_ADMIN')", 
     operations:[
         new Get(),
@@ -52,6 +55,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[ApiFilter(SearchFilter::class, properties: [ 'conversation' => 'exact' ])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
@@ -59,7 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read_postshare', 'read_comment', 'read_ideal_bibliotek', 'read-conversation'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_ideal_bibliotek', 'read_conversation', 'read_likepost', 'write_likepost', 'write_postshare', 'write_comment', 'write_ideal_biblioteque'])]
     private ?int $id = null;
 
     #[Groups(['write_user'])]
@@ -83,7 +87,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comments;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read_postshare', 'read_comment', 'write_user'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_conversation', 'write_user'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]

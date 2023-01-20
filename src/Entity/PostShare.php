@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostShareRepository::class)]
 #[ApiResource(
+    //mercure: true,
     //security: "is_granted('ROLE_USER')",
     normalizationContext: [ 'groups' => 'read_postshare' ],
     denormalizationContext: [ 'groups' => 'write_postshare' ]
@@ -29,7 +30,7 @@ class PostShare
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read_postshare', 'read_comment', 'write_postshare'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_likepost', 'write_postshare', 'write_likepost'])]
     private ?int $id = null;
 
     #[Groups(['read_postshare', 'write_postshare'])]
@@ -57,12 +58,21 @@ class PostShare
     #[ORM\OneToMany(mappedBy: 'postShare', targetEntity: PostImage::class)]
     private Collection $postImages;
 
+    private $a = 1;
+    
+    private $b = 2;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->likePosts = new ArrayCollection();
         $this->postImages = new ArrayCollection();
+    }
+
+    #[Groups(['read_postshare'])]
+    public function getSum(): int
+    {
+        return $this->a + $this->b;
     }
 
     public function getId(): ?int
@@ -210,6 +220,6 @@ class PostShare
 
     public function __toString()
     {
-        return $this->getDescription();
+        return $this->description;
     }
 }

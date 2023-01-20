@@ -9,6 +9,9 @@ use Doctrine\Persistence\ObjectManager;
 
 class PostShareFixtures extends Fixture implements DependentFixtureInterface
 {
+    const POST1 = 'POST1';
+    const POST2 = 'POST2';
+
     public function load(ObjectManager $manager): void
     {
         $postThomas1 = new PostShare();
@@ -17,6 +20,7 @@ class PostShareFixtures extends Fixture implements DependentFixtureInterface
         $postThomas1->setDate(new \DateTime('2023-01-04 13:35:40'));
         $postThomas1->setImage('Les-Freres-Karamazov.jpeg');
         $manager->persist($postThomas1);
+        $this->addReference(self::POST1, $postThomas1);
 
         $postThomas2 = new PostShare();
         $postThomas2->setUser($this->getReference(UserFixtures::USER_THOMAS));
@@ -24,6 +28,7 @@ class PostShareFixtures extends Fixture implements DependentFixtureInterface
         $postThomas2->setDate(new \DateTime('2023-01-04 14:35:40'));
         $postThomas2->setImage('histoire-des-bleus.jpeg');
         $manager->persist($postThomas2);
+        $this->addReference(self::POST2, $postThomas2);
 
         $postSimone1 = new PostShare();
         $postSimone1->setUser($this->getReference(UserFixtures::USER_SIMONE));

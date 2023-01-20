@@ -15,7 +15,8 @@ use Symfony\Component\Validator\Constraints\Unique;
 #[ORM\Entity(repositoryClass: IdealBibliothequeRepository::class)]
 #[ApiResource(
     //security: "is_granted('ROLE_USER')",
-    normalizationContext: [ 'groups' => 'read_ideal_biblioteque' ]
+    normalizationContext: [ 'groups' => 'read_ideal_biblioteque' ],
+    denormalizationContext: [ 'groups' => ['write_ideal_biblioteque']]
 )]
 #[ApiFilter(SearchFilter::class, properties: [ 'user' => 'exact' ])]
 class IdealBibliotheque
@@ -25,29 +26,30 @@ class IdealBibliotheque
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read_ideal_biblioteque'])]
+    #[Groups(['read_ideal_biblioteque', 'write_ideal_biblioteque'])]
     private ?int $id = null;
 
-    #[Groups(['read_ideal_biblioteque'])]
+    #[Groups(['read_ideal_biblioteque', 'write_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book1 = null;
 
-    #[Groups(['read_ideal_biblioteque'])]
+    #[Groups(['read_ideal_biblioteque', 'write_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book2 = null;
 
-    #[Groups(['read_ideal_biblioteque'])]
+    #[Groups(['read_ideal_biblioteque', 'write_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book3 = null;
 
-    #[Groups(['read_ideal_biblioteque'])]
+    #[Groups(['read_ideal_biblioteque', 'write_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book4 = null;
 
-    #[Groups(['read_ideal_biblioteque'])]
+    #[Groups(['read_ideal_biblioteque', 'write_ideal_biblioteque'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $book5 = null;
 
+    #[Groups(['read_ideal_biblioteque', 'write_ideal_biblioteque'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 

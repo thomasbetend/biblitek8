@@ -10,12 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class GetUserController extends AbstractController
 {
     #[Route('/get/user', name: 'app_get_user')]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository)
     {
-        $user = $userRepository->getUserById();
-
-        return $this->render('get_user/index.html.twig', [
-            'controller_name' => 'GetUserController',
-        ]);
+        return 'hello';
     }
 }
