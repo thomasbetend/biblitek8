@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: [ 'groups' => ['read_comment'] ],
     denormalizationContext: [ 'groups' => ['write_comment'] ],
 )]
-#[ApiFilter(SearchFilter::class, properties: [ 'post_share' => 'exact' ])]
+#[ApiFilter(SearchFilter::class, properties: [ 'postShare' => 'exact' ])]
 class Comment
 {
     use TimestampableEntity;
@@ -36,14 +36,14 @@ class Comment
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
     #[Groups(['read_comment', 'write_comment'])]
-    private ?PostShare $post_share = null;
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?PostShare $postShare = null;
 
     #[Groups(['read_comment', 'write_comment'])]
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?User $user = null;
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -87,12 +87,12 @@ class Comment
 
     public function getPostShare(): ?PostShare
     {
-        return $this->post_share;
+        return $this->postShare;
     }
 
-    public function setPostShare(?PostShare $post_share): self
+    public function setPostShare(?PostShare $postShare): self
     {
-        $this->post_share = $post_share;
+        $this->postShare = $postShare;
 
         return $this;
     }

@@ -63,7 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read_postshare', 'read_comment', 'read_ideal_bibliotek', 'read_conversation', 'read_likepost', 'write_likepost', 'write_postshare', 'write_comment', 'write_ideal_biblioteque'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_ideal_bibliotek', 'read_conversation', 'read_likepost', 'write_likepost', 'write_postshare', 'write_comment', 'write_ideal_biblioteque', 'read_message', 'write_message'])]
     private ?int $id = null;
 
     #[Groups(['write_user'])]
@@ -87,11 +87,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comments;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read_postshare', 'read_comment', 'read_conversation', 'write_user'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_conversation', 'write_user', 'read_message'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read_postshare', 'read_comment'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_conversation', 'read_message'])]
     private ?string $avatar = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: LikePost::class)]

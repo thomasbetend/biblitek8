@@ -55,7 +55,7 @@ class IdealBibliotheque
 
 /*     #[Groups(['read_ideal_biblioteque'])]
     #[ORM\ManyToOne(inversedBy: 'idealBibliotheques')]
-    private ?User $user = null; */
+    private ?User $user = null;  */
 
     public function getId(): ?int
     {

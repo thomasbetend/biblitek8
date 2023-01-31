@@ -24,7 +24,7 @@ class Conversation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('read_conversation')]
+    #[Groups('read_conversation', 'write_message')]
     private ?int $id = null;
 
     #[Groups('read_conversation')]

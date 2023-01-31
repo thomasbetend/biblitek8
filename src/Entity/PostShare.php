@@ -30,7 +30,7 @@ class PostShare
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read_postshare', 'read_comment', 'read_likepost', 'write_postshare', 'write_likepost'])]
+    #[Groups(['read_postshare', 'read_comment', 'read_likepost', 'write_postshare', 'write_likepost', 'write_comment'])]
     private ?int $id = null;
 
     #[Groups(['read_postshare', 'write_postshare'])]
@@ -69,7 +69,7 @@ class PostShare
         $this->postImages = new ArrayCollection();
     }
 
-    #[Groups(['read_postshare'])]
+    #[Groups(['read_postshare', 'write_comment'])]
     public function getSum(): int
     {
         return $this->a + $this->b;
