@@ -24,15 +24,19 @@ class Conversation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('read_conversation', 'write_message')]
+    #[Groups('read_conversation', 'read_message', 'write_message')]
     private ?int $id = null;
 
-    #[Groups('read_conversation')]
+    #[Groups('read_conversation', 'read_message')]
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'conversations')]
     private Collection $user;
 
+    #[Groups('read_conversation', 'read_message')]
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class)]
     private Collection $messages;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -97,6 +101,23 @@ class Conversation
         }
 
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
 }

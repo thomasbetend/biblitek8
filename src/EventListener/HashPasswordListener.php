@@ -8,6 +8,7 @@ use Doctrine\ORM\Events;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsEntityListener(event: Events::prePersist, method: 'hashPassword', entity: User::class)]
+#[AsEntityListener(event: Events::preUpdate, method: 'hashPassword', entity: User::class)]
 class HashPasswordListener
 {
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
@@ -17,17 +18,15 @@ class HashPasswordListener
 
     public function hashPassword(User $user)
     {
-        if (!$user->getPlainPassword()){
+        if (!$user->plainPassword){
             return;
         }
 
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
-            $user->getPlainPassword(),
+            $user->plainPassword,
         );
 
-        $user->setUpdatedAt(new \DateTime());
-        // $this->setUpdatedAt(); stof
         $user->setPassword($hashedPassword);
 
     }

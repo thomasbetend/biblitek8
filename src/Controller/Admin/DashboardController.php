@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Book;
+use App\Entity\Comment;
 use App\Entity\IdealBibliotheque;
 use App\Entity\PostShare;
 use App\Entity\User;
@@ -49,6 +50,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('IdealBibliotheque', 'fas fa-book', IdealBibliotheque::class);
         yield MenuItem::linkToCrud('Book', 'fas fa-book', Book::class);
+        yield MenuItem::linkToCrud('Comment', 'fas fa-message', Comment::class);
 
     }
 }

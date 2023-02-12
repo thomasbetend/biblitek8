@@ -13,9 +13,8 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('content')
-            ->add('date')
+            ->add('postShare')
             ->add('user')
-            ->add('post_share')
         ;
     }
 

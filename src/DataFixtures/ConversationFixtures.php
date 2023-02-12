@@ -15,12 +15,14 @@ class ConversationFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $conversation1 = new Conversation();
+        $conversation1->setName('conversation1');
         $conversation1->addUser($this->getReference(UserFixtures::USER_THOMAS));
         $conversation1->addUser($this->getReference(UserFixtures::USER_JEAN));
         $manager->persist($conversation1);
         $this->addReference(self::CONVERSATION_1, $conversation1);
 
         $conversation2 = new Conversation();
+        $conversation2->setName('conversation2');
         $conversation2->addUser($this->getReference(UserFixtures::USER_THOMAS));
         $conversation2->addUser($this->getReference(UserFixtures::USER_SIMONE));
         $manager->persist($conversation2);

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\PostShare;
+use App\Form\PostShareAdminType;
 use App\Form\PostShareType;
 use App\Repository\PostShareRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/post/share')]
+#[Route('/postshare')]
 class PostShareController extends AbstractController
 {
     #[Route('/', name: 'app_post_share_index', methods: ['GET'])]

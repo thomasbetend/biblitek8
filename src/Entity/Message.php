@@ -13,8 +13,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    normalizationContext: ['groups' => 'read_message'],
-    denormalizationContext: ['groups' => 'write_message']
+    normalizationContext: ['groups' => ['read_message']],
+    denormalizationContext: ['groups' => ['write_message']]
 )]
 #[ApiFilter(SearchFilter::class, properties: [ 'conversation' => 'exact', 'user' => 'exact' ])]
 #[ApiFilter(FilterOrderFilter::class, properties: [ 'date' => 'ASC'])]
@@ -34,14 +34,13 @@ class Message
     private ?string $content = null;
 
     #[Groups(['read_message', 'write_message'])]
-    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist'])]
     private ?User $user = null;
 
     #[Groups(['read_message', 'write_message'])]
     #[ORM\ManyToOne(inversedBy: 'messages')]
     private ?Conversation $conversation = null;
 
-    #[Groups(['read_message', 'write_message'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date = null;
 
